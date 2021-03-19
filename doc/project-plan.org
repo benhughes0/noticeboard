@@ -1,0 +1,86 @@
+* Planning for Ben's project
+:properties:
+:date: [2021-03-12 Fri 13:29]
+:end:
+
+** Agenda
+*** Goals
+**** Ben learning
+**** Some 'good' for team
+*** Deliverables
+**** A useful service
+***** Source code
+***** Docs
+- see [[Documentation]]
+***** Running maintainable server
+***** The ability to work together to improve it in future
+- e.g. put it in ~/benhughes/~ on github
+- I can have fork and use it push upstream
+**** Documentation
+***** Logbook
+- what we are doing day by day
+- just a few short notes and links to any interesting commits will do
+  nicely
+- we can keep those in same format then merge
+  - e.g. a convention to use in an email
+  - if the email contains these declarations, they will be noted
+***** Technical documentation
+- record of technical decisions & why made
+  - not every detail - major architecural stuff
+    - why are we building it this way
+- good comments in code
+- message sequence diagrams
+- API docs
+***** User documentation
+****** How to install
+****** How to run
+****** Troubleshooting
+***** Meta documentation
+****** What are we trying to achieve?
+******* Ben
+******* Sean
+******** Ben learns as much as I can cram into him in 7 weeks
+****** How are we going about doing that?
+****** Why are we doing it that way?
+
+*** Timeline
+**** Week 1
+[2021-03-12 Fri 14:00]
+**** Week 2
+[2021-03-19 Fri 14:00]
+
+***** DONE Set up repo
+CLOSED: [2021-03-19 Fri 15:01]
+
+- Ben as owner
+- manage repo
+  - grant access
+  - pull requests
+
+- [X] repo
+  - [X] set up Ben personal account on github
+    - added personal email address to github account
+  - [X] repo
+    - README
+    - Licence
+  - [X] invited Sean as collaborator
+  - [X] Sean fork repo
+  - [X] test pull request
+    - [X] Sean create
+    - [X] Ben accept
+***** Plan
+- [ ] plan
+  - [ ] agree goals
+  - [ ] timeline & division of labour, etc.
+  - [ ] add project-plan.org to ./doc directory
+
+**** Week 3
+[2021-03-26 Fri 14:00]
+**** Week 4
+[2021-04-02 Fri 14:00]
+**** Week 5
+[2021-04-09 Fri 14:00]
+**** Week 6
+[2021-04-16 Fri 14:00]
+**** Week 7
+[2021-04-23 Fri 14:00]
