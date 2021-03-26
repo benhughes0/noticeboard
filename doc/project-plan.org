@@ -108,7 +108,8 @@ my-secret
 CLOSED: [2021-03-19 Fri 17:21]
 - [-] plan
   - [X] add project-plan.org to ./doc directory
-  - [ ] agree goals about what we're making
+  - [X] agree goals about what we're making
+  - [ ] plan
     - [ ] write noticeboard server
     - [ ] write noticeboard client
     - [ ] implement according to decisions around functionality
