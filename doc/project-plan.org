@@ -3,53 +3,53 @@
 :date: [2021-03-12 Fri 13:29]
 :end:
 
-** Agenda
-*** Goals
-**** Ben learning
-**** Some 'good' for team
-*** Deliverables
-**** A useful service
-***** Source code
-***** Docs
+** Goals
+*** Ben learning
+*** Some 'good' for team
+** Deliverables
+*** A useful service
+**** Source code
+**** Docs
 - see [[Documentation]]
-***** Running maintainable server
-***** The ability to work together to improve it in future
+**** Running maintainable server
+**** The ability to work together to improve it in future
 - e.g. put it in ~/benhughes/~ on github
 - I can have fork and use it push upstream
-**** Documentation
-***** Logbook
+*** Documentation
+**** Logbook
 - what we are doing day by day
 - just a few short notes and links to any interesting commits will do
   nicely
 - we can keep those in same format then merge
   - e.g. a convention to use in an email
   - if the email contains these declarations, they will be noted
-***** Technical documentation
+**** Technical documentation
 - record of technical decisions & why made
   - not every detail - major architecural stuff
     - why are we building it this way
 - good comments in code
 - message sequence diagrams
 - API docs
-***** User documentation
-****** How to install
-****** How to run
-****** Troubleshooting
-***** Meta documentation
-****** What are we trying to achieve?
-******* Ben
-******* Sean
-******** Ben learns as much as I can cram into him in 7 weeks
-****** How are we going about doing that?
-****** Why are we doing it that way?
+**** User documentation
+***** How to install
+***** How to run
+***** Troubleshooting
+**** Meta documentation
+***** What are we trying to achieve?
+****** Ben
+****** Sean
+******* Ben learns as much as possible in 7 weeks
+***** How are we going about doing that?
+***** Why are we doing it that way?
 
-*** Timeline
-**** Week 1
+** Timeline
+*** DONE Week 1
+CLOSED: [2021-03-19 Fri 17:33]
 [2021-03-12 Fri 14:00]
-**** Week 2
+*** DONE Week 2
+CLOSED: [2021-03-19 Fri 17:33]
 [2021-03-19 Fri 14:00]
-
-***** DONE Set up repo
+**** DONE Set up repo
 CLOSED: [2021-03-19 Fri 15:01]
 
 - Ben as owner
@@ -68,19 +68,196 @@ CLOSED: [2021-03-19 Fri 15:01]
   - [X] test pull request
     - [X] Sean create
     - [X] Ben accept
-***** Plan
-- [ ] plan
-  - [ ] agree goals
-  - [ ] timeline & division of labour, etc.
-  - [ ] add project-plan.org to ./doc directory
+**** DONE Decide what noticeboard will do
+CLOSED: [2021-03-19 Fri 16:46]
+- simple to use noticeboard shared over the network
 
-**** Week 3
+See [[Transcript]]
+
+: nb add key value
+
+#+name: nb client
+#+begin_example
+nb add status Going for coffee
+nb get status@ben
+Going for coffee
+nb list @ben
+- status Going for coffee
+nb del status
+
+nb get "53DC13E4-F0A2-4B67-9757-EDA5598998AD@ben"
+my-secret
+#+end_example
+
+#+name: json version
+#+begin_src js :exports both :output results :results output verbatim wrap
+{
+  "status" : "Going for coffee",
+  "key"    : value
+}
+#+end_src
+
+#+name: json version
+#+begin_src js :exports both :output results :results output verbatim wrap
+{
+  "53DC13E4-F0A2-4B67-9757-EDA5598998AD" : "my-secret",
+}
+#+end_src
+
+**** DONE Plan
+CLOSED: [2021-03-19 Fri 17:21]
+- [-] plan
+  - [X] add project-plan.org to ./doc directory
+  - [ ] agree goals about what we're making
+    - [ ] write noticeboard server
+    - [ ] write noticeboard client
+    - [ ] implement according to decisions around functionality
+    - [ ] document it
+    - [ ] deploy it
+    - [ ] use it
+  - [ ] timeline & division of labour, etc.
+
+***** outputs
+- [X] repo
+- [X] analysis
+- [X] plan
+
+*** Week 3
 [2021-03-26 Fri 14:00]
-**** Week 4
+
+- work on specification
+  - 'black box' functionality
+  - background work for Sean
+  - complete spec together
+  - external interfaces
+  - APIs
+
+- coming up with detailed implementation plan
+  - how it all works
+  - what programs, what they do, how they work, how they interact
+
+**** TODO Initial rough spec for noticeboard                          :@SOHA:
+DEADLINE: <2021-03-24 Wed>
+
+**** outputs
+- [ ] specification
+  - [ ] message sequence diagrams
+  - [ ] functional spec for server
+  - [ ] functional spec for client
+  - [ ] API spec
+    - tooling for specifying APIs?
+- [ ] implementation plan
+  - what needs to be built
+  - who is going to build what
+  - timeline of deliverables/products
+- [ ] first version of client/server (based on echo client/server)
+
+*** Week 4
 [2021-04-02 Fri 14:00]
-**** Week 5
+
+- working version of noticeboard
+  - so at least Ben & Sean can use
+
+**** outputs
+- [ ] working version
+
+*** Week 5
 [2021-04-09 Fri 14:00]
-**** Week 6
+
+- slackbot
+
+**** TODO background work on Slack API                                :@SOHA:
+
+**** outputs
+- [ ] slackbot
+
+*** Week 6
 [2021-04-16 Fri 14:00]
-**** Week 7
+
+- deploy shared noticeboard service
+  - accessible to anyone in IRFS
+    - eg. via Slack
+
+**** outputs
+- [ ] shared noticeboard service
+  - need to decide this how to deliver final output
+  - maybe rely on slackbot for sharing
+  - possible config
+    - /internal/ noticeboard
+    - /API/ slackbot can talk to /internal/ and /internet/
+    - /internet/ slack can talk to /API/ slackbot
+
+*** Week 7
 [2021-04-23 Fri 14:00]
+
+- wrap up
+  - finish docs
+  - tidy up repo
+- everything else
+- ensure repo in good state
+
+
+* Transcript
+
+
+Alice
+POST “does anyone know when the shop closes?”
+
+: #352
+
+Bob
+READ
+
+: #352 does anyone know when the shop closes?
+: #567 does anyone know when the pub opens?
+
+Bob
+REPLY #352 “I think it’s at 5”
+
+: #123
+
+Alice
+READ
+
+: #352 does anyone know when the shop closes?
+
+    : #123 I think it’s at 5
+
+: #567 does anyone know when the pub opens?
+
+Alice
+READ #352
+
+: #352 does anyone know when the shop closes?
+
+    : #123 I think it’s at 5
+
+Alice
+REMOVE #352
+
+
+Analysis
+
+- Noticeboard can be accessed by different users across a network
+- A string of text (a message) can be posted, read, replied to and removed
+- Can read the whole board, or a specific message and only its replies
+- Every message has an ID
+- Anonymous
+    - No sign in
+- No need to specify host
+    - Must be another way of specifying a host
+    - eg. environment variable, config file
+
+Policy
+
+- Maximum n POSTS at once across the noticeboard
+- Quota per person?
+- which messages can you reply to? all? only top level?
+- No tracking
+
+Issues
+Using “ “ for text input
+Using # for ID, shell comment sign
+
+Questions
+Should we be able to specify a host? (eg —host=)
