@@ -1,0 +1,219 @@
+* Functional specifications
+
+** Client Server API
+
+The API uses JSON for client requests and server responses.
+
+*** POST
+- create message
+  - display id
+  - error: cannot create message
+
+Action: POST
+Message: string
+
+eg. in JSON
+
+#+name: post-message
+#+begin_src js
+{
+  "action" : "post",
+  "text"   : "does anyone know X?"
+}
+#+end_src
+
+Or SMTP style:
+
+: HELO server
+: POST ...
+: READ
+
+
+Message format (what client sends to server)
+
+: POST text
+
+where /text/ is a string of up to /n/ characters
+where n = 64 (arbitrary limit)
+truncate
+
+Server reply
+
+: 352
+: ERROR reason
+
+*** READ #id
+- read message #id
+  - display messages and replies
+  - error: no such message
+
+: READ 352
+
+: 352 text
+:     123 reply
+
+: ERROR No such message
+
+#+name: read-message-id
+#+begin_src js
+{
+  "action"  : "read",
+  "id" : 353
+}
+#+end_src
+
+
+NB. design decision here - does server or client format messages?
+
+#+name: read-all-response
+#+begin_src text
+{
+  "status" : "ok",
+  "messages" : [
+    {
+      "id" : 352,
+      "text" : "does anyone know X?"
+      "replies" : [
+        { "id" : 123, "text" : "I think about 5" },
+        { "id" : 126, "text" : "I think about 6" },
+      ]
+    }
+    { "id" : 353, "text" : "does anyone know Y?", "replies" : [] }
+    { "id" : 354, "text" : "does anyone know Z?", "replies" : [] }
+  ]
+}
+#+end_src
+
+Error message
+#+begin_src js
+{
+  "status" : "error",
+  "reason" : "..."
+}
+#+end_src
+
+#+name: example
+#+begin_src ruby :exports both :output results :results output verbatim wrap
+require 'json'
+require 'pp'
+
+json = '
+{
+  "status" : "ok",
+  "messages" : [
+    {
+      "id" : 352,
+      "text" : "does anyone know X?",
+      "replies" : [
+        { "id" : 123, "text" : "I think about 5" },
+        { "id" : 126, "text" : "I think about 6" }
+      ]
+    },
+    { "id" : 353, "text" : "does anyone know Y?", "replies" : [] },
+    { "id" : 354, "text" : "does anyone know Z?", "replies" : [] }
+  ]
+}
+'
+
+# puts json
+data = JSON.parse(json)
+if data["status"] == "ok"
+  data["messages"].each do |msg|
+    puts "%d: %s" % [msg["id"], msg["text"]]
+    msg["replies"].each do |reply|
+      puts "%6d: %s" % [reply["id"], reply["text"]]
+    end
+  end
+end
+
+data["messages"][1]["replies"] << { "id" => 999, "text" => "Hi"}
+
+# puts JSON.pretty_print(data)
+puts data.to_json
+
+#+end_src
+
+#+RESULTS: example
+:results:
+352: does anyone know X?
+   123: I think about 5
+   126: I think about 6
+353: does anyone know Y?
+354: does anyone know Z?
+{"status":"ok","messages":[{"id":352,"text":"does anyone know
+   X?","replies":[{"id":123,"text":"I think about 5"},
+   {"id":126,"text":"I think about 6"}]},{"id":353,"text":"does anyone know Y?","replies":[{"id":999,"text":"Hi"}]},{"id":354,"text":"does anyone know Z?","replies":[]}]}
+:end:
+
+*** READ (all messages)
+- read all messages
+  - with replies
+
+: READ 352
+
+: 352 text
+:     123 reply
+: 352 text
+:     123 reply
+
+#+name: read-message-all
+#+begin_src js
+{
+  "action"  : "read",
+}
+or
+{
+  "action"  : "read",
+  "id" : "all"
+}
+#+end_src
+
+*** REPLY #id
+- create a reply to #id
+  - display reply #id
+  - error: no such message
+  - error: cannot create reply
+
+#+name: reply-message-id
+#+begin_src js
+{
+  "action"  : "reply",
+  "id"      : 353,
+  "text"    : "I think it's at 5"
+}
+#+end_src
+
+*** REMOVE #id
+- delete message #id
+  - display OK
+  - error: no such message
+
+#+name: reply-message-id
+#+begin_src js
+{
+  "action"  : "remove",
+  "id"      : 353,
+}
+#+end_src
+
+** Server
+
+*** POST
+
+=/post=
+
+*** READ
+
+=/read=
+
+*** READ #id
+
+=/read/:id=
+
+*** REPLY #id
+
+=/reply/:id=
+
+*** REMOVE #id
+
+=/remove/:id=
