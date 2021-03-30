@@ -1,0 +1,145 @@
+* Message sequence diagrams
+
+** POST message
+
+- add checking for noticeboard max
+  - decide behaviour - reject, add to queue?
+
+#+name: post message
+#+header: :file post-message.png
+#+begin_src plantuml :exports both :output results :results output
+actor Alice
+participant client
+participant server
+database DB
+
+Alice  -> client : type "POST does anyone know X?"
+client -> server : POST "does anyone know X?"
+server -> DB     : create message "does anyone know X?"
+DB -> DB         : add message
+alt add message
+        DB     -> server : message id #352
+        server -> client : message id #352
+        client -> Alice  : display "#352"
+else cannot add message
+        DB     -> server : error "cannot add message"
+        server -> client : error "cannot add message"
+        client -> Alice  : display "cannot add message"
+end
+#+end_src
+
+#+RESULTS: post message
+[[file:post-message.png]]
+
+** READ
+
+#+name: read messages
+#+header: :file read-messages.png
+#+begin_src plantuml :exports both :output results :results output
+actor Bob
+participant client
+participant server
+database DB
+
+Bob    -> client : type "READ"
+client -> server : READ
+server -> DB : get messages (& replies)
+DB     -> server : [messages & replies]
+server -> client : [messages & replies]
+client -> Bob    : display messages
+#+end_src
+
+#+RESULTS: read messages
+[[file:read-messages.png]]
+
+** REPLY #id
+
+#+name: reply to message
+#+header: :file reply-to-message.png
+#+begin_src plantuml :exports both :output results :results output
+actor Bob
+participant client
+participant server
+database DB
+
+Bob    -> client : type "REPLY #352 I think it's Y"
+client -> server : REPLY #352, "I think it's Y"
+server -> DB : validate message id
+alt message exists
+        DB -> server : message exists
+        server -> DB : create reply
+        alt can add reply
+                DB     -> server : reply id
+                server -> client : reply id
+                client -> Bob    : display reply id
+        else cannot add reply
+                DB     -> server : error "Cannot create reply"
+                server -> client : error "Cannot create reply"
+                client -> Bob    : error "Cannot create reply"
+        end
+else message does not exist
+        DB -> server : message does not exist
+        server -> client : error "No such message"
+        client -> Bob    : display "No such message"
+end
+#+end_src
+
+#+RESULTS: reply to message
+[[file:reply-to-message.png]]
+
+** READ #id
+
+#+name: read message id
+#+header: :file read-message-id.png
+#+begin_src plantuml :exports both :output results :results output
+actor Alice
+participant client
+participant server
+database DB
+
+Alice  -> client : read message #352
+client -> server : READ #352
+server -> DB : get message #353 & reply #123
+
+alt message exists
+        DB -> server : [message #353 & reply #123]
+        server -> client : [message #353 & reply #123]
+        client -> Alice  : display message #353 & reply #123
+else message does not exist
+        DB -> server : error "No such message"
+        server -> client : error "No such message"
+        client -> Alice  : display "No such message"
+end
+#+end_src
+
+#+RESULTS: read message id
+[[file:read-message-id.png]]
+
+** REMOVE #id
+
+#+name: remove message id
+#+header: :file remove-message-id.png
+#+begin_src plantuml :exports both :output results :results output
+actor Alice
+participant client
+participant server
+database DB
+
+Alice  -> client : "remove message #352"
+client -> server : REMOVE #352
+server -> DB : delete message #353 & reply #123
+
+alt message exists
+        DB     -> server : OK
+        server -> client : OK
+        client -> Alice  : OK
+else message does not exist
+        DB     -> server : error "No such message"
+        server -> client : error "No such message"
+        client -> Alice  : display "No such message"
+end
+
+#+end_src
+
+#+RESULTS: remove message id
+[[file:remove-message-id.png]]
