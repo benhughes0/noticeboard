@@ -148,7 +148,7 @@ CLOSED: [2021-03-19 Fri 17:21]
 - [X] implementation plan
   - what needs to be built
   - who is going to build what
-- [ ] first version of client/server (based on echo client/server)
+- [X] first version of client/server (based on echo client/server)
 
 ***** Sean
 - [ ] add POST
@@ -160,7 +160,7 @@ CLOSED: [2021-03-19 Fri 17:21]
 - [ ] add REPLY #id
 
 *** Week 4
-[2021-04-02 Fri 14:00]
+[2021-04-01 Thu 15:00]
 
 - working version of noticeboard
   - so at least Ben & Sean can use
