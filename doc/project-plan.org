@@ -150,23 +150,42 @@ CLOSED: [2021-03-19 Fri 17:21]
   - who is going to build what
 - [X] first version of client/server (based on echo client/server)
 
-***** Sean
-- [ ] add POST
-- [ ] add READ
-
-***** Ben
-- [ ] add READ #id
-- [ ] add REMOVE #id
-- [ ] add REPLY #id
-
 *** Week 4
 [2021-04-01 Thu 15:00]
 
 - working version of noticeboard
   - so at least Ben & Sean can use
 
+nb
+
+: C:\> nb.py post Hi everyone!
+
+$ nb.py post Hi everyone!
+$ nb.py read
+$ nb.py read 352
+$ nb.py reply 352 text
+$ nb.py remove 352
+
+$ nb.py reply 352 text
+
+subcommand = reply
+id = arg 1
+text = rest of args joined by space
+
+**** TODO Sean convert to JSON messages
+**** TODO Ben figure out how to use argparse to implement subcommands
+
 **** outputs
 - [ ] working version
+
+***** Sean
+- [ ] add POST
+- [ ] add READALL
+
+***** Ben
+- [ ] add READ #id
+- [ ] add REMOVE #id
+- [ ] add REPLY #id
 
 *** Week 5
 [2021-04-09 Fri 14:00]

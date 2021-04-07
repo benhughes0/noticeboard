@@ -2,6 +2,8 @@
 import socket
 import argparse
 
+MAX_SIZE = 65535
+
 s = socket.socket()
 
 # Parse args
@@ -22,7 +24,14 @@ port = args.port
 string_to_echo = args.echo
 
 s.connect((host, port))
-print(s.recv(1024).decode('utf-8'))
+msg = s.recv(MAX_SIZE).decode('utf-8')
+# decode JSON
+print(msg)
+
+# encode JSON
 s.send((string_to_echo).encode('utf-8'))
-print(s.recv(1024).decode('utf-8'))
+reply = s.recv(MAX_SIZE).decode('utf-8')
+# decode JSON
+print(reply)
+
 s.close()
