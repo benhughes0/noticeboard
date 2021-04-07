@@ -55,11 +55,11 @@ def worker(q, handler):
         handler(job)
         q.task_done()
 
-def handle_output(request):
+def output_handler(request):
     logging.info(request)
 
 def worker_output(output_q):
-    worker(output_q, handle_output)
+    worker(output_q, output_handler)
 
 output_q = queue.Queue()
 def output(text):
@@ -73,16 +73,7 @@ output("host_ip: %s" % host_ip)
 output("host: %s" % host)
 output("port: %s" % port)
 
-def handle_request(job):
-    request_id, conn = job
-
-    msg = {
-        "status" : "ok",
-        "message" : "Thank you for connecting to " + host
-    }
-    send_message(conn, msg)
-
-    request = recv_message(conn)
+def handle_request(request):
     action = request["action"]
 
     if action == "echo":
@@ -100,11 +91,24 @@ def handle_request(job):
             "error" : text
         }
 
+    return msg
+
+def request_handler(job):
+    request_id, conn = job
+
+    msg = {
+        "status" : "ok",
+        "message" : "Thank you for connecting to " + host
+    }
+    send_message(conn, msg)
+
+    request = recv_message(conn)
+    msg = handle_request(request)
     send_message(conn, msg)
     conn.close()                # Close the connection
 
 def worker_job(q):
-    worker(q, handle_request)
+    worker(q, request_handler)
 
 jobq = queue.Queue()
 for i in range(num_workers):
