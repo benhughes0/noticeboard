@@ -92,12 +92,23 @@ def handle_request(job):
     send_message(conn, msg)
 
     request = recv_message(conn)
-    output("They said '%s'" % request["message"])
-    text = '%04d: You said %s' % (request_id, request["message"])
-    msg = {
-        "status" : "ok",
-        "message" : text
-    }
+    action = request["action"]
+
+    if action == "echo":
+        output("They said '%s'" % request["message"])
+        text = '%04d: You said %s' % (request_id, request["message"])
+        msg = {
+            "status" : "ok",
+            "message" : text
+        }
+    else:
+        text = "Unknown action: '%s'" % action
+        output(text)
+        msg = {
+            "status" : "error",
+            "error" : text
+        }
+
     send_message(conn, msg)
     conn.close()                # Close the connection
 

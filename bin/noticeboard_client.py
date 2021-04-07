@@ -22,26 +22,38 @@ parser.add_argument('--host', default='127.0.0.1', type=str,
 # --port
 parser.add_argument('--port', default=12345, type=int,
                     help='host port to connect to')
-# --echo
-parser.add_argument('--echo', default="echo", type=str,
+# --message
+parser.add_argument('--message', default="Hello World!", type=str,
                     help='string to echo back')
+
+# --action
+parser.add_argument('--action', default="echo", type=str,
+                    help='action to perform')
 
 args = parser.parse_args()
 host = args.host
 port = args.port
-string_to_echo = args.echo
+action = args.action
+message = args.message
 
 s.connect((host, port))
 
 msg = recv_message(s)
-print(msg["message"])
+if msg["status"] == "ok":
+    print(msg["message"])
+else:
+    print("ERROR: %s" % msg["error"])
 
 request = {
-    "action" : "echo",
-    "message" : string_to_echo
+    "action" : action,
+    "message" : message
 }
 send_message(s, request)
-response = recv_message(s)
-print(response["message"])
+
+msg = recv_message(s)
+if msg["status"] == "ok":
+    print(msg["message"])
+else:
+    print("ERROR: %s" % msg["error"])
 
 s.close()
