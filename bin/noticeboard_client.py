@@ -1,16 +1,7 @@
 #!/usr/bin/env python3
 import socket
 import argparse
-import json
-
-MAX_SIZE = 65535
-
-def send_message(conn, msg):
-    return conn.send(json.dumps(msg).encode('utf-8'))
-
-def recv_message(conn):
-    json_str = conn.recv(MAX_SIZE).decode('utf-8')
-    return json.loads(json_str)
+from nblib import send_message, recv_message
 
 s = socket.socket()
 

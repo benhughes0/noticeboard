@@ -5,22 +5,13 @@ import time
 import threading
 import queue
 import logging
-import json
+from nblib import send_message, recv_message
 
 DEFAULT_PORT = 12345
 DEFAULT_WORKER_COUNT = 3
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_TIMEOUT = 13        # use prime as timeout
 LISTEN_QUEUE_SIZE = 5       # how many connection requests to queue for listen()
-MAX_SIZE = 65535
-
-# Helper functions for sending and receiving JSON messages
-def send_message(conn, msg):
-    return conn.send(json.dumps(msg).encode('utf-8'))
-
-def recv_message(conn):
-    json_str = conn.recv(MAX_SIZE).decode('utf-8')
-    return json.loads(json_str)
 
 s = socket.socket()         # Create a socket object
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
