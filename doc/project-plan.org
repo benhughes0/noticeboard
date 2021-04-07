@@ -173,6 +173,20 @@ id = arg 1
 text = rest of args joined by space
 
 **** TODO Sean convert to JSON messages
+- NB. you have to use
+  : conn.send(json.dumps(msg).encode('utf-8'))
+ie. you have encode the message as utf-8 even though JSON is defined
+as mandating utf-8 for data interchange.
+
+See https://tools.ietf.org/html/rfc8259#section-8.1
+
+#+begin_quote
+JSON text exchanged between systems that are not part of a closed
+ecosystem MUST be encoded using UTF-8 [RFC3629].
+#+end_quote
+
+So, python, WTF?
+
 **** TODO Ben figure out how to use argparse to implement subcommands
 
 **** outputs

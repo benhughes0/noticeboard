@@ -5,6 +5,7 @@ import time
 import threading
 import queue
 import logging
+import json
 
 MAX_SIZE = 65535
 DEFAULT_PORT = 12345
@@ -75,14 +76,24 @@ output("port: %s" % port)
 
 def handle_request(job):
     request_id, conn = job
-    conn.send(('{"message": "Thank you for connecting to ' + host + '"}').encode('utf-8'))
+    msg = {
+        "status" : "ok",
+        "message" : "Thank you for connecting to " + host
+    }
+    # conn.send(('{"message": "Thank you for connecting to ' + host + '"}').encode('utf-8'))
+    conn.send(json.dumps(msg).encode('utf-8'))
     echo_text = conn.recv(MAX_SIZE).decode('utf-8')
-    output("They said '%s'" % echo_text)
+    request = json.loads(echo_text)
+    output("They said '%s'" % request["message"])
     # Simulate work
     # for n in range(10):
     # time.sleep(10)
-    msg = '%04d: You said %s' % (request_id, echo_text)
-    conn.send(msg.encode('utf-8'))
+    text = '%04d: You said %s' % (request_id, request["message"])
+    msg = {
+        "status" : "ok",
+        "message" : text
+    }
+    conn.send(json.dumps(msg).encode('utf-8'))
     conn.close()                # Close the connection
 
 def worker(q):
