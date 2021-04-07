@@ -196,6 +196,9 @@ So, python, WTF?
 - [ ] add POST
 - [ ] add READALL
 
+- start new thread after worker crashes
+
+
 ***** Ben
 - [ ] add READ #id
 - [ ] add REMOVE #id

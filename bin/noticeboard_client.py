@@ -17,6 +17,10 @@ parser.add_argument('--port', default=12345, type=int,
 parser.add_argument('--message', default="Hello World!", type=str,
                     help='string to echo back')
 
+# --id
+parser.add_argument('--id', default=0, type=int,
+                    help='id of message to act on')
+
 # --action
 parser.add_argument('--action', default="echo", type=str,
                     help='action to perform')
@@ -31,7 +35,8 @@ s.connect((host, port))
 
 request = {
     "action" : action,
-    "message" : message
+    "message" : message,
+    "id" : args.id
 }
 send_message(s, request)
 
@@ -43,6 +48,10 @@ if response["status"] == "ok":
         print(response["id"])
     elif action == "readall":
         print(response["messages"])
+        # for k, v in response["messages"]:
+        #    print("%4s : %s" % (k, v))
+    elif action == "read":
+        print(response["message"])
     else:
         print(response)
 else:

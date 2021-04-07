@@ -75,7 +75,7 @@ MESSAGES = {}
 
 def handle_request(request):
     action = request["action"]
-    request_id = request["id"]
+    request_id = request["request_id"]
 
     if action == "echo":
         output("They said '%s'" % request["message"])
@@ -96,9 +96,10 @@ def handle_request(request):
             "messages" : MESSAGES
         }
     elif action == "read":
+        msg_id = request["id"]
         response = {
             "status" : "ok",
-            "message" : action + " not implemented"
+            "message" : MESSAGES[msg_id]
         }
     elif action == "reply":
         response = {
@@ -124,7 +125,7 @@ def request_handler(job):
     request_id, conn = job
 
     request = recv_message(conn)
-    request["id"] = request_id
+    request["request_id"] = request_id
 
     msg = handle_request(request)
     send_message(conn, msg)
