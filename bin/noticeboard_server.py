@@ -58,14 +58,11 @@ def worker(q, handler):
 def output_handler(request):
     logging.info(request)
 
-def worker_output(output_q):
-    worker(output_q, output_handler)
-
 output_q = queue.Queue()
 def output(text):
     output_q.put_nowait(text)
 
-output_thread = threading.Thread(target=worker_output, args=[output_q], daemon=True)
+output_thread = threading.Thread(target=worker, args=[output_q, output_handler], daemon=True)
 output_thread.start()
 
 output("host_name: %s" % host_name)
@@ -73,46 +70,69 @@ output("host_ip: %s" % host_ip)
 output("host: %s" % host)
 output("port: %s" % port)
 
+# Global store for messages
+MESSAGES = {}
+
 def handle_request(request):
     action = request["action"]
+    request_id = request["id"]
 
     if action == "echo":
         output("They said '%s'" % request["message"])
-        text = '%04d: You said %s' % (request_id, request["message"])
-        msg = {
+        text = 'You said %s' % request["message"]
+        response = {
             "status" : "ok",
             "message" : text
+        }
+    elif action == "post":
+        MESSAGES[request_id] = request["message"]
+        response = {
+            "status" : "ok",
+            "id" : request_id
+        }
+    elif action == "readall":
+        response = {
+            "status" : "ok",
+            "messages" : MESSAGES
+        }
+    elif action == "read":
+        response = {
+            "status" : "ok",
+            "message" : action + " not implemented"
+        }
+    elif action == "reply":
+        response = {
+            "status" : "ok",
+            "message" : action + " not implemented"
+        }
+    elif action == "remove":
+        response = {
+            "status" : "ok",
+            "message" : action + " not implemented"
         }
     else:
         text = "Unknown action: '%s'" % action
         output(text)
-        msg = {
+        response = {
             "status" : "error",
-            "error" : text
+            "reason" : text
         }
 
-    return msg
+    return response
 
 def request_handler(job):
     request_id, conn = job
 
-    msg = {
-        "status" : "ok",
-        "message" : "Thank you for connecting to " + host
-    }
-    send_message(conn, msg)
-
     request = recv_message(conn)
+    request["id"] = request_id
+
     msg = handle_request(request)
     send_message(conn, msg)
     conn.close()                # Close the connection
 
-def worker_job(q):
-    worker(q, request_handler)
-
 jobq = queue.Queue()
 for i in range(num_workers):
-    t = threading.Thread(target=worker_job, args=[jobq], daemon=True)
+    t = threading.Thread(target=worker, args=[jobq, request_handler], daemon=True)
     t.start()
 
 s.bind((host, port))        # Bind to the port

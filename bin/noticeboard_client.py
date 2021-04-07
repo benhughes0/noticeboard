@@ -29,22 +29,23 @@ message = args.message
 
 s.connect((host, port))
 
-msg = recv_message(s)
-if msg["status"] == "ok":
-    print(msg["message"])
-else:
-    print("ERROR: %s" % msg["error"])
-
 request = {
     "action" : action,
     "message" : message
 }
 send_message(s, request)
 
-msg = recv_message(s)
-if msg["status"] == "ok":
-    print(msg["message"])
+response = recv_message(s)
+if response["status"] == "ok":
+    if action == "echo":
+        print(response["message"])
+    elif action == "post":
+        print(response["id"])
+    elif action == "readall":
+        print(response["messages"])
+    else:
+        print(response)
 else:
-    print("ERROR: %s" % msg["error"])
+    print("ERROR: %s" % response["reason"])
 
 s.close()
