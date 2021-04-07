@@ -5,6 +5,13 @@ import json
 
 MAX_SIZE = 65535
 
+def send_message(conn, msg):
+    return conn.send(json.dumps(msg).encode('utf-8'))
+
+def recv_message(conn):
+    json_str = conn.recv(MAX_SIZE).decode('utf-8')
+    return json.loads(json_str)
+
 s = socket.socket()
 
 # Parse args
@@ -25,22 +32,16 @@ port = args.port
 string_to_echo = args.echo
 
 s.connect((host, port))
-msg = s.recv(MAX_SIZE).decode('utf-8')
-data = json.loads(msg)
-# print(msg)
-print(data["message"])
 
-# s.send((string_to_echo).encode('utf-8'))
-# encode JSON
+msg = recv_message(s)
+print(msg["message"])
+
 request = {
     "action" : "echo",
     "message" : string_to_echo
 }
-s.send(json.dumps(request).encode('utf-8'))
-reply = s.recv(MAX_SIZE).decode('utf-8')
-# print(reply)
-# decode JSON
-response = json.loads(reply)
+send_message(s, request)
+response = recv_message(s)
 print(response["message"])
 
 s.close()
