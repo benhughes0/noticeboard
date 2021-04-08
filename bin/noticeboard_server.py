@@ -72,15 +72,17 @@ output("port: %s" % port)
 
 # Global store for messages
 MESSAGES = {}
+# Record which message a reply is added to
 REPLIES = {}
 
 def new_message(text):
-    return [text, []]
+    return { "message" : text, "replies" : {} }
 
 def handle_request(request):
     action = request["action"]
     request_id = request["request_id"]
 
+    # ECHO
     if action == "echo":
         output("They said '%s'" % request["message"])
         text = 'You said %s' % request["message"]
@@ -88,44 +90,80 @@ def handle_request(request):
             "status" : "ok",
             "message" : text
         }
+
+    # POST
     elif action == "post":
         MESSAGES[request_id] = new_message(request["message"])
         response = {
             "status" : "ok",
             "id" : request_id
         }
+
+    # READALL
     elif action == "readall":
         response = {
             "status" : "ok",
             "messages" : MESSAGES
         }
+
+    # READ
     elif action == "read":
         msg_id = request["id"]
-        response = {
-            "status" : "ok",
-            "message" : MESSAGES[msg_id]
-        }
+        if msg_id in MESSAGES:
+            response = {
+                "status" : "ok",
+                "message" : MESSAGES[msg_id]
+            }
+        else:
+            text = "Unknown message id: '%s'" % msg_id
+            output(text)
+            response = {
+                "status" : "error",
+                "reason" : text
+            }
+
+    # REPLY
     elif action == "reply":
         msg_id = request["id"]
-        msg = MESSAGES[msg_id]
+        if msg_id in MESSAGES:
+            msg = MESSAGES[msg_id]
+            msg["replies"][request_id] = request["message"]
+            REPLIES[request_id] = msg_id
+            response = {
+                "status" : "ok",
+                "id" : request_id
+            }
+        else:
+            text = "Unknown message id: '%s'" % msg_id
+            output(text)
+            response = {
+                "status" : "error",
+                "reason" : text
+            }
 
-        REPLIES[request_id] = request["message"]
-        msg[-1].append(REPLIES[request_id])
-
-        response = {
-            "status" : "ok",
-            "id" : request_id
-        }
+    # REMOVE
     elif action == "remove":
         msg_id = request["id"]
-        if msg_id in MESSAGES:
-            del MESSAGES[msg_id]
-        if msg_id in REPLIES:
-            del REPLIES[msg_id]
-        response = {
-            "status" : "ok",
-            "message" : "Message %s removed" % msg_id
-        }
+        if msg_id in MESSAGES or msg_id in REPLIES:
+            if msg_id in MESSAGES:
+                del MESSAGES[msg_id]
+            elif msg_id in REPLIES:
+                parent_id = REPLIES.pop(msg_id)
+                msg = MESSAGES[parent_id]
+                del msg["replies"][msg_id]
+            response = {
+                "status" : "ok",
+                "message" : "Message %s removed" % msg_id
+            }
+        else:
+            text = "Unknown message id: '%s'" % msg_id
+            output(text)
+            response = {
+                "status" : "error",
+                "reason" : text
+            }
+
+    # UNKNOWN
     else:
         text = "Unknown action: '%s'" % action
         output(text)
