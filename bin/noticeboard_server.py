@@ -72,6 +72,10 @@ output("port: %s" % port)
 
 # Global store for messages
 MESSAGES = {}
+REPLIES = {}
+
+def new_message(text):
+    return [text, []]
 
 def handle_request(request):
     action = request["action"]
@@ -85,7 +89,7 @@ def handle_request(request):
             "message" : text
         }
     elif action == "post":
-        MESSAGES[request_id] = request["message"]
+        MESSAGES[request_id] = new_message(request["message"])
         response = {
             "status" : "ok",
             "id" : request_id
@@ -102,14 +106,25 @@ def handle_request(request):
             "message" : MESSAGES[msg_id]
         }
     elif action == "reply":
+        msg_id = request["id"]
+        msg = MESSAGES[msg_id]
+
+        REPLIES[request_id] = request["message"]
+        msg[-1].append(REPLIES[request_id])
+
         response = {
             "status" : "ok",
-            "message" : action + " not implemented"
+            "id" : request_id
         }
     elif action == "remove":
+        msg_id = request["id"]
+        if msg_id in MESSAGES:
+            del MESSAGES[msg_id]
+        if msg_id in REPLIES:
+            del REPLIES[msg_id]
         response = {
             "status" : "ok",
-            "message" : action + " not implemented"
+            "message" : "Message %s removed" % msg_id
         }
     else:
         text = "Unknown action: '%s'" % action
