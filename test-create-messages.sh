@@ -20,3 +20,5 @@ echo READALL
 bin/noticeboard_client.py --action readall
 echo REPLY to removed message 1
 bin/noticeboard_client.py --action reply --id 1 --message "Hello"
+echo UNKNOWN action
+bin/noticeboard_client.py --action foo --id 1 --message "Foo"
