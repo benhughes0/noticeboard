@@ -1,0 +1,23 @@
+ADD messages
+1
+2
+3
+READALL
+{'1': {'message': 'Message 1', 'replies': {}}, '2': {'message': 'Message 2', 'replies': {}}, '3': {'message': 'Message 3', 'replies': {}}}
+REPLY to message 1
+{'status': 'ok', 'id': 5}
+{'status': 'ok', 'id': 6}
+READ message 1
+{'message': 'Message 1', 'replies': {'5': 'Hello', '6': 'World'}}
+REMOVE reply 5
+{'status': 'ok', 'message': 'Message 5 removed'}
+READ message 1
+{'message': 'Message 1', 'replies': {'6': 'World'}}
+REMOVE message 1
+{'status': 'ok', 'message': 'Message 1 removed'}
+READALL
+{'2': {'message': 'Message 2', 'replies': {}}, '3': {'message': 'Message 3', 'replies': {}}}
+REPLY to removed message 1
+ERROR: Unknown message id: '1'
+UNKNOWN action
+ERROR: Unknown action: 'foo'
