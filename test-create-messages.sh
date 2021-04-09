@@ -1,5 +1,6 @@
 #!/bin/sh
-echo ADD messages
+# Simple script to test each available action
+echo POST messages
 for i in {1..3}; do
   bin/noticeboard_client.py --action post --message "Message $i"
 done

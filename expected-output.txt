@@ -1,4 +1,4 @@
-ADD messages
+POST messages
 1
 2
 3

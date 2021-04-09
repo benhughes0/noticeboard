@@ -187,32 +187,33 @@ ecosystem MUST be encoded using UTF-8 [RFC3629].
 
 So, python, WTF?
 
-**** TODO Ben figure out how to use argparse to implement subcommands
+**** DONE Ben figure out how to use argparse to implement subcommands
+CLOSED: [2021-04-09 Fri 14:13]
 
 **** outputs
-- [ ] working version
+- [X] working version
 
 ***** Sean
-- [ ] add POST
-- [ ] add READALL
+- [X] add POST
+- [X] add READALL
 
 - start new thread after worker crashes
 
-
 ***** Ben
-- [ ] add READ #id
-- [ ] add REMOVE #id
-- [ ] add REPLY #id
+- [X] add READ #id
+- [X] add REMOVE #id
+- [X] add REPLY #id
 
 *** Week 5
 [2021-04-09 Fri 14:00]
 
-- slackbot
+- finish off noticeboard client and server
+- with subcommands
 
-**** TODO background work on Slack API                                :@SOHA:
+- delete associated REPLIES entries when deleting from MESSAGE
 
 **** outputs
-- [ ] slackbot
+- [ ] finished client/server with subcommands
 
 *** Week 6
 [2021-04-16 Fri 14:00]
