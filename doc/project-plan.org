@@ -212,6 +212,9 @@ CLOSED: [2021-04-09 Fri 14:13]
 
 - delete associated REPLIES entries when deleting from MESSAGE
 
+- docker build -t soha/server01 -f ./Dockerfile .
+- docker run -p12345:12345 -it --rm soha/server01 ./test-noticeboard.sh
+
 **** outputs
 - [ ] finished client/server with subcommands
 
