@@ -3,6 +3,7 @@ RUN dpkg-reconfigure debconf -f noninteractive -p critical && \
     DEBIAN_FRONTEND=noninteractive apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install python3.9
+RUN ln /usr/bin/python3.9 /usr/bin/python3
 RUN mkdir -p /project
 ADD . /project
 WORKDIR /project

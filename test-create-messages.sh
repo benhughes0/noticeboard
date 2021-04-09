@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Simple script to test each available action
 echo POST messages
 for i in {1..3}; do
