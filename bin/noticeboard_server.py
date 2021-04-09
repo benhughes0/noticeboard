@@ -78,7 +78,6 @@ REPLIES = {}
 def new_message(text):
     return { "message" : text, "replies" : {} }
 
-
 def action_echo(request):
     output("They said '%s'" % request["message"])
     text = 'You said %s' % request["message"]
@@ -171,38 +170,22 @@ def action_unknown(request):
     }
     return response
 
+ACTIONS = {
+    "echo"    : action_echo,
+    "post"    : action_post,
+    "readall" : action_readall,
+    "read"    : action_read,
+    "reply"   : action_reply,
+    "remove"  : action_remove,
+    "unknown" : action_unknown
+}
+
 def handle_request(request):
     action = request["action"]
-
-    # ECHO
-    if action == "echo":
-        response = action_echo(request)
-
-    # POST
-    elif action == "post":
-        response = action_post(request)
-
-    # READALL
-    elif action == "readall":
-        response = action_readall(request)
-
-    # READ
-    elif action == "read":
-        response = action_read(request)
-
-    # REPLY
-    elif action == "reply":
-        response = action_reply(request)
-
-    # REMOVE
-    elif action == "remove":
-        response = action_remove(request)
-
-    # UNKNOWN
-    else:
-        response = action_unknown(request)
-
-    return response
+    if not action in ACTIONS:
+        action = "unknown"
+    fn = ACTIONS[action]
+    return fn(request)
 
 def request_handler(job):
     request_id, conn = job
