@@ -3,8 +3,6 @@ import socket
 import argparse
 from nblib import send_message, recv_message
 
-s = socket.socket()
-
 # Parse args
 parser = argparse.ArgumentParser(description='Connect to server')
 subparsers = parser.add_subparsers(dest='action',help='sub-command help')
@@ -48,6 +46,7 @@ port = args.port
 action = args.action
 message = args.message
 
+s = socket.socket()
 s.connect((host, port))
 
 request = {
