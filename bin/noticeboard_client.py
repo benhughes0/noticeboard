@@ -7,6 +7,23 @@ s = socket.socket()
 
 # Parse args
 parser = argparse.ArgumentParser(description='Connect to server')
+subparsers = parser.add_subparsers(dest='action',help='sub-command help')
+
+parser_post = subparsers.add_parser('post', help='print help')
+parser_post.add_argument('message', type=str, help='message help')
+
+parser_read = subparsers.add_parser('read', help='read help')
+parser_read.add_argument('id', type=int, help='id help')
+
+parser_readall = subparsers.add_parser('readall', help='readall help')
+
+parser_reply = subparsers.add_parser('reply', help='reply help')
+parser_reply.add_argument('id', type=int, help='id help')
+parser_reply.add_argument('message', type=str, help='message help')
+
+parser_remove = subparsers.add_parser('remove', help='remove help')
+parser_remove.add_argument('id', type=int, help='id help')
+
 # --host
 parser.add_argument('--host', default='127.0.0.1', type=str,
                     help='host to connect to')
