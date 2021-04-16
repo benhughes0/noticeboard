@@ -224,6 +224,7 @@ Sean
 - [X] remove REPLIES id when del MESSAGES
 - [ ] restart dead thread
 - [ ] document internals
+- [ ] check thread safety throughout (e.g. in read, etc.)
 
 Ben
 - [X] finish off client message formatting
