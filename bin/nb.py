@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.9
 import socket
 import argparse
 from nblib import send_message, recv_message
