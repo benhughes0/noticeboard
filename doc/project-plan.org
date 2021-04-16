@@ -220,16 +220,16 @@ CLOSED: [2021-04-09 Fri 14:13]
 
 **** to do
 Sean
-- make updating MESSAGES thread safe
-- restart dead thread
-- remove REPLIES id when del MESSAGES
-- document internals
+- [X] make updating MESSAGES thread safe
+- [X] remove REPLIES id when del MESSAGES
+- [ ] restart dead thread
+- [ ] document internals
 
 Ben
-- finish off client message formatting
-- change names (nb.py)
-- user guide
-- help
+- [X] finish off client message formatting
+- [X] change names (nb.py)
+- [X] user guide
+- [X] help
 
 *** Week 6
 [2021-04-16 Fri 14:00]
