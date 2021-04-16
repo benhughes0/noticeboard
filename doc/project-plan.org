@@ -238,6 +238,7 @@ Ben
 - deploy shared noticeboard service
   - accessible to anyone in IRFS
     - eg. via Slack
+  - not quite - we can run on a Nebula vm and access via ssh tunnel
 
 **** outputs
 - [ ] shared noticeboard service
@@ -251,6 +252,15 @@ Ben
 *** Week 7
 [2021-04-23 Fri 14:00]
 
+- Sean to get access to Open Nebula
+- Sean to sort out ssh-agent on Windows
+- make noticeboard available via public IP address
+  - deploy on AWS
+  - autostart server
+    - systemd
+  - docker
+    - provisioning docker image
+    - Artefactory/docker-hub
 - wrap up
   - finish docs
   - tidy up repo
