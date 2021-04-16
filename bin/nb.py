@@ -62,6 +62,11 @@ send_message(s, request)
 
 response = recv_message(s)
 
+def format_message(msg_id, msg):
+    print("%s: %s" % (msg_id, msg["message"]))
+    for reply_id, reply in msg["replies"].items():
+        print("\t%s: %s" % (reply_id, reply))
+
 if response["status"] == "ok":
     if args.debug:
         print(response)
@@ -71,13 +76,9 @@ if response["status"] == "ok":
         print("Posted message %s" % (response["id"]))
     elif action == "readall":
         for msg_id, msg in response["messages"].items():
-            print("%s: %s" % (msg_id, msg["message"]))
-            for reply_id, reply in msg["replies"].items():
-                print("\t%s: %s" % (reply_id, reply))
+            format_message(msg_id, msg)
     elif action == "read":
-        print("%s: %s" % (args.id,response["message"]["message"]))
-        for reply_id, reply in response["message"]["replies"].items():
-            print("\t%s: %s" % (reply_id, reply))
+        format_message(args.id, response["message"])
     elif action == "reply":
         print("Posted message %s" % (response["id"]))
     elif action == "remove":

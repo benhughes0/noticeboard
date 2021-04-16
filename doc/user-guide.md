@@ -10,7 +10,7 @@ To see all the messages currently on the noticeboard, use the action 'readall'
 
 `python bin/nb.py readall`
 
-To focus on a single message, use the action 'read' and specifiy the ID of the message.
+To focus on a single message, use the action 'read' and specify the ID of the message.
 
 `python bin/nb.py read 2`
 
