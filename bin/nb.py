@@ -40,6 +40,10 @@ parser.add_argument('--id', default=0, type=int,
 parser.add_argument('--action', default="echo", type=str,
                     help='action to perform')
 
+# --debug
+parser.add_argument('--debug', action='store_true',
+                    help='output responses in debug format')
+
 args = parser.parse_args()
 host = args.host
 port = args.port
@@ -57,17 +61,19 @@ request = {
 send_message(s, request)
 
 response = recv_message(s)
-# print(str(response))
+
 if response["status"] == "ok":
-    if action == "echo":
+    if args.debug:
+        print(response)
+    elif action == "echo":
         print(response["message"])
     elif action == "post":
         print("Posted message %s" % (response["id"]))
     elif action == "readall":
         for msg_id, msg in response["messages"].items():
-           print("%s: %s" % (msg_id, msg["message"]))
-           for reply_id, reply in msg["replies"].items():
-               print("\t%s: %s" % (reply_id, reply))
+            print("%s: %s" % (msg_id, msg["message"]))
+            for reply_id, reply in msg["replies"].items():
+                print("\t%s: %s" % (reply_id, reply))
     elif action == "read":
         print("%s: %s" % (args.id,response["message"]["message"]))
         for reply_id, reply in response["message"]["replies"].items():

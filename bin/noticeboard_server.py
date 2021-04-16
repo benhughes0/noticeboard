@@ -139,26 +139,29 @@ def action_reply(request):
         }
     return response
 
+MESSAGES_LOCK = threading.Lock()
+
 def action_remove(request):
     msg_id = request["id"]
-    if msg_id in MESSAGES or msg_id in REPLIES:
-        if msg_id in MESSAGES:
-            del MESSAGES[msg_id]
-        elif msg_id in REPLIES:
-            parent_id = REPLIES.pop(msg_id)
-            msg = MESSAGES[parent_id]
-            del msg["replies"][msg_id]
-        response = {
-            "status" : "ok",
-            "message" : "Message %s removed" % msg_id
-        }
-    else:
-        text = "Unknown message id: '%s'" % msg_id
-        output(text)
-        response = {
-            "status" : "error",
-            "reason" : text
-        }
+    with MESSAGES_LOCK:
+        if msg_id in MESSAGES or msg_id in REPLIES:
+            if msg_id in MESSAGES:
+                del MESSAGES[msg_id]
+            elif msg_id in REPLIES:
+                parent_id = REPLIES.pop(msg_id)
+                msg = MESSAGES[parent_id]
+                del msg["replies"][msg_id]
+            response = {
+                "status" : "ok",
+                "message" : "Message %s removed" % msg_id
+            }
+        else:
+            text = "Unknown message id: '%s'" % msg_id
+            output(text)
+            response = {
+                "status" : "error",
+                "reason" : text
+            }
     return response
 
 def action_unknown(request):
