@@ -147,6 +147,12 @@ def action_remove(request):
         if msg_id in MESSAGES or msg_id in REPLIES:
             if msg_id in MESSAGES:
                 del MESSAGES[msg_id]
+                reply_ids = []
+                for reply_id in REPLIES:
+                    if REPLIES[reply_id] == msg_id:
+                        reply_ids.append(reply_id)
+                for reply_id in reply_ids:
+                    del REPLIES[reply_id]
             elif msg_id in REPLIES:
                 parent_id = REPLIES.pop(msg_id)
                 msg = MESSAGES[parent_id]
