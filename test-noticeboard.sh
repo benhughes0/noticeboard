@@ -7,6 +7,6 @@ SERVER_PID=$!
 trap "kill $SERVER_PID > /dev/null 2>&1" EXIT
 sleep 0.5
 # Run test script
-./test-create-messages.sh > output.txt
+./test-client.sh > output.txt
 # Diff output
 diff output.txt expected-output.txt
